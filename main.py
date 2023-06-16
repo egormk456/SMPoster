@@ -164,6 +164,8 @@ async def admin(message: types.Message, state: FSMContext):
 #                    'message': message,
 #                    'from_group': 1,
 #                    'attachments': attachments})
+
+
 #     print(f"Файлы загружены! для {tg_chat_id}", datetime.now())
 #     await asyncio.sleep(30)
 #     shutil.rmtree(f'files/{bind.owner_id}/{tg_chat_id}')
