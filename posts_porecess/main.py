@@ -47,68 +47,72 @@ async def send_proc(bot, message_items):
     bind = None
     owner = None
 
-    for message_item in message_items:
-        chat_id = message_item['chat_id']
-        if not (bind or owner):
-            bind = await getter.client_select_bind_with_tg_channel_id(str(chat_id))
-            if not bind:
-                raise ValueError('bind not found')
+    try:
+        for message_item in message_items:
+            chat_id = message_item['chat_id']
+            if not (bind or owner):
+                bind = await getter.client_select_bind_with_tg_channel_id(str(chat_id))
+                if not bind:
+                    raise ValueError('bind not found')
 
-            owner = await getter.client_select(bind.owner_id)
+                owner = await getter.client_select(bind.owner_id)
 
-        if 'caption' in message_item and message_item['caption'] is not None:
-            text = message_item['caption']
-        elif 'text' in message_item and message_item['text'] is not None:
-            text = message_item['text']
-        if 'entities' in message_item and message_item['entities'] is not None:
-            entities = message_item['entities']
-        elif 'caption_entities' in message_item and message_item['caption_entities'] is not None:
-            entities = message_item['caption_entities']
-        if 'reply_markup' in message_item and message_item['reply_markup'] is not None:
-            reply_markup = message_item['reply_markup']
-        if 'link' in message_item and message_item['link'] is not None:
-            link = message_item['link']
+            if 'caption' in message_item and message_item['caption'] is not None:
+                text = message_item['caption']
+            elif 'text' in message_item and message_item['text'] is not None:
+                text = message_item['text']
+            if 'entities' in message_item and message_item['entities'] is not None:
+                entities = message_item['entities']
+            elif 'caption_entities' in message_item and message_item['caption_entities'] is not None:
+                entities = message_item['caption_entities']
+            if 'reply_markup' in message_item and message_item['reply_markup'] is not None:
+                reply_markup = message_item['reply_markup']
+            if 'link' in message_item and message_item['link'] is not None:
+                link = message_item['link']
 
-        if 'photo' in message_item:
-            attachments.append(await get_photo_attachment(bot, message_item['photo']['file_id'], owner.vk_token))
+            if 'photo' in message_item:
+                attachments.append(await get_photo_attachment(bot, message_item['photo']['file_id'], owner.vk_token))
 
-        if 'video' in message_item:
-            attachments.append(await get_video_attachment(bot, message_item['video']['file_id'], owner.vk_token))
+            if 'video' in message_item:
+                attachments.append(await get_video_attachment(bot, message_item['video']['file_id'], owner.vk_token))
 
-    text = parse_entities(text, entities)
-    text = parse_buttons(text, reply_markup)
+        text = parse_entities(text, entities)
+        text = parse_buttons(text, reply_markup)
 
-    if bind.excl_tags and '#' in text:
-        return
-    if bind.qty:
-        qty_end = ''
-        if len(text) >= bind.qty:
-            qty_end = '...'
-        print('bind.qty',  bind.qty)
-        text = f"{text[:bind.qty].rstrip()}{qty_end}"
-    if bind.opt_text:
-        print('bind.opt_text', bind.opt_text)
-        text = f"{text}\n\n{bind.opt_text}"
-    if bind.url:
-        print('bind.url', bind.url)
-        text = f"{text}\n\nПодробнее: {link}"
-    if bind.tags:
-        print('bind.tags', bind.tags)
-        text = f"{text}\n\n{bind.tags}"
+        if bind.excl_tags and '#' in text:
+            raise TypeError('tags excluded')
+        if bind.qty:
+            qty_end = ''
+            if len(text) >= bind.qty:
+                qty_end = '...'
+            print('bind.qty',  bind.qty)
+            text = f"{text[:bind.qty].rstrip()}{qty_end}"
+        if bind.opt_text:
+            print('bind.opt_text', bind.opt_text)
+            text = f"{text}\n\n{bind.opt_text}"
+        if bind.url:
+            print('bind.url', bind.url)
+            text = f"{text}\n\nПодробнее: {link}"
+        if bind.tags:
+            print('bind.tags', bind.tags)
+            text = f"{text}\n\n{bind.tags}"
 
-    for vk_group_id in bind.vk_groups_ids:
-        requests.get(
-            url='https://api.vk.com/method/wall.post',
-            params={
-                'access_token': owner.vk_token,
-                'owner_id': -int(vk_group_id),
-                'message': text,
-                'from_group': 1,
-                'attachments': ','.join(attachments) if attachments != [] else None,
-                'v': "5.131"
-            }
-        )
-        print(f'send OK to {vk_group_id}')
+        for vk_group_id in bind.vk_groups_ids:
+            requests.get(
+                url='https://api.vk.com/method/wall.post',
+                params={
+                    'access_token': owner.vk_token,
+                    'owner_id': -int(vk_group_id),
+                    'message': text,
+                    'from_group': 1,
+                    'attachments': ','.join(attachments) if attachments != [] else None,
+                    'v': "5.131"
+                }
+            )
+            print(f'send OK to {vk_group_id}')
+
+    except Exception as ex:
+        print(f'send ERR {ex}')
 
 
 async def get_photo_attachment(bot, file_id, vk_token):
