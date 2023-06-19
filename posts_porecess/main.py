@@ -12,7 +12,12 @@ from data.commands import getter
 
 POST_CONTENT_TYPES = [
     'photo',
-    'video'
+    'video',
+    'audio',
+    'document',
+    'animation',
+    'voice',
+    'video_note'
 ]
 HANDLE_TYPES = POST_CONTENT_TYPES + ['text']
 
@@ -96,6 +101,9 @@ async def send_proc(bot, message_items):
         if bind.tags:
             print('bind.tags', bind.tags)
             text = f"{text}\n\n{bind.tags}"
+
+        if text is None and attachments == []:
+            raise ValueError('no text and attachments')
 
         for vk_group_id in bind.vk_groups_ids:
             requests.get(
