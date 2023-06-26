@@ -1,7 +1,9 @@
+import csv
 from datetime import datetime
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram.types import InputFile
 
 from bot import bot
 from markups.admin_markup import AdminMarkup
@@ -717,3 +719,52 @@ class AdminAdvert:
                                f"Ваше сообщение отправлено - <b>{count}</b> клиентам",
                                reply_markup=AdminMarkup.admin_menu())
         await state.finish()
+
+
+class AdminStats:
+    @staticmethod
+    async def admin_stats_menu(callback: types.CallbackQuery):
+        await callback.message.edit_text("Какую статистику выгрузить ?",
+                                         reply_markup=AdminMarkup.admin_stats_menu())
+
+    @staticmethod
+    async def admin_stats_clients(callback: types.CallbackQuery):
+        all_clients = await getter.get_all_clients()
+        with open("table_clients.csv", "w", newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["id", "user_id", "username", "access", "binds",
+                             "limit_binds", "subscribe_type", "vk_token", "block"])
+            for i in all_clients:
+                writer.writerow([i.id, i.user_id, i.username, i.access, i.binds,
+                                 i.limit_binds, i.subscribe_type, i.vk_token, i.block])
+        table_clients = InputFile("table_clients.csv")
+        await bot.send_document(chat_id=callback.from_user.id,
+                                document=table_clients)
+
+    @staticmethod
+    async def admin_stats_binds(callback: types.CallbackQuery):
+        all_binds = await getter.get_all_binds()
+        with open("table_binds.csv", "w", newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["id", "owner_id", "tg_channels_names", "tg_channels_ids", "tg_channels_urls",
+                             "vk_groups_names", "vk_groups_ids", "vk_groups_urls", "qty", "tags", "opt_text",
+                             "excl_tags", "url", "on"])
+            for i in all_binds:
+                writer.writerow([i.id, i.owner_id, i.tg_channels_names, i.tg_channels_ids, i.tg_channels_urls,
+                                 i.vk_groups_names, i.vk_groups_ids, i.vk_groups_urls, i.qty, i.tags, i.opt_text,
+                                 i.excl_tags, i.url, i.on])
+        table_binds = InputFile("table_binds.csv")
+        await bot.send_document(chat_id=callback.from_user.id,
+                                document=table_binds)
+
+    @staticmethod
+    async def admin_stats_payments(callback: types.CallbackQuery):
+        all_payments = await getter.all_payments()
+        with open("table_payments.csv", "w", newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["id", "user_id", "date_p", "type_p", "amount_p"])
+            for i in all_payments:
+                writer.writerow([i.id, i.user_id, i.date_p, i.type_p, i.amount_p])
+        table_payments = InputFile("table_payments.csv")
+        await bot.send_document(chat_id=callback.from_user.id,
+                                document=table_payments)

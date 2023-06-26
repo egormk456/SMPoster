@@ -17,11 +17,14 @@ class AdminMarkup:
                                     callback_data="admin_limits_changes")
         get4 = InlineKeyboardButton(text="Сделать объявление",
                                     callback_data="admin_advert")
+        get5 = InlineKeyboardButton(text="Выгрузить Статистику",
+                                    callback_data="admin_stats_menu")
         approve_.insert(get)
         approve_.insert(get1)
         approve_.insert(get2)
         approve_.insert(get3)
         approve_.insert(get4)
+        approve_.insert(get5)
         return approve_
 
     @staticmethod
@@ -309,6 +312,24 @@ class AdminMarkup:
         get3 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
                                          f"Вернуться в меню пользователя",
                                     callback_data="admin_back_user")
+        approve_.insert(get)
+        approve_.insert(get1)
+        approve_.insert(get2)
+        approve_.insert(get3)
+        return approve_
+
+    @staticmethod
+    def admin_stats_menu():
+        approve_ = InlineKeyboardMarkup(row_width=2)
+        get = InlineKeyboardButton(text=f"Клиенты",
+                                   callback_data="admin_stats_clients")
+        get1 = InlineKeyboardButton(text=f"Связи",
+                                    callback_data="admin_stats_binds")
+        get2 = InlineKeyboardButton(text=f"Платежи",
+                                    callback_data="admin_stats_payments")
+        get3 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
+                                         f"Вернуться в главное меню",
+                                    callback_data="admin_main")
         approve_.insert(get)
         approve_.insert(get1)
         approve_.insert(get2)

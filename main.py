@@ -74,6 +74,11 @@ async def main_menu(message: types.Message):
             if client.access:
                 await bot.send_message(message.from_user.id,
                                        "<b>Меню автопостинга</b>\n\n"
+                                       "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                       "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                       "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                       "логику распределения контента)\n\n"
+                                       "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                        f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
                                        f"<b>{KEYBOARD.get('STOPWATCH')} Подписка заканчивается</b> - "
                                        f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -83,6 +88,13 @@ async def main_menu(message: types.Message):
             elif client.subscribe_type == "start":
                 await bot.send_message(message.from_user.id,
                                        "<b>Меню автопостинга</b>\n\n"
+                                       "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                       "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                       "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                       "логику распределения контента)\n\n"
+                                       "Мы дарим 7 дней бесплатного периода, всем, кто подключился!\n"
+                                       "Для активации откройте раздел 'Подписка' и затем 'Промо подписка'\n\n"
+                                       "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                        f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n\n"
                                        f"<b>{KEYBOARD.get('LINKED_PAPERCLIPS')} Количество связей</b> - "
                                        f"<i>{len(binds)}/{client.limit_binds}</i>\n",
@@ -91,6 +103,11 @@ async def main_menu(message: types.Message):
             else:
                 await bot.send_message(message.from_user.id,
                                        "<b>Меню автопостинга</b>\n\n"
+                                       "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                       "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                       "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                       "логику распределения контента)\n\n"
+                                       "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                        f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n"
                                        f"<b>{KEYBOARD.get('STOPWATCH')} Подписка закончилась</b> - "
                                        f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -388,6 +405,7 @@ async def on_startup(_):
     """Очередь постов"""
     dp.queue = defaultdict(list)
     asyncio.create_task(queue_manager())
+
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)

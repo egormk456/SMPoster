@@ -18,6 +18,11 @@ async def all_binds():
     return binds
 
 
+async def all_payments():
+    payments = await Payments.query.gino.all()
+    return payments
+
+
 async def client_select(user_id):
     client = await Clients.query.where(Clients.user_id == user_id).gino.first()
     return client

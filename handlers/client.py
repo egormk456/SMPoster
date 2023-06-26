@@ -22,6 +22,11 @@ class ClientMain:
         if client.access:
             await callback.message.edit_text(
                 "<b>Меню автопостинга</b>\n\n"
+                "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                "логику распределения контента)\n\n"
+                "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                 f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
                 f"<b>{KEYBOARD.get('STOPWATCH')} Подписка заканчивается</b> - "
                 f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -32,6 +37,13 @@ class ClientMain:
         elif client.subscribe_type == "start":
             await callback.message.edit_text(
                 "<b>Меню автопостинга</b>\n\n"
+                "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                "логику распределения контента)\n\n"
+                "Мы дарим 7 дней бесплатного периода, всем, кто подключился!\n"
+                "Для активации откройте раздел 'Подписка' и затем 'Промо подписка'\n\n"
+                "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                 f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n\n"
                 f"<b>{KEYBOARD.get('LINKED_PAPERCLIPS')} Количество связей</b> - "
                 f"<i>{len(binds)}/{client.limit_binds}</i>\n",
@@ -40,6 +52,11 @@ class ClientMain:
         else:
             await callback.message.edit_text(
                 "<b>Меню автопостинга</b>\n\n"
+                "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                "логику распределения контента)\n\n"
+                "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                 f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n\n"
                 f"<b>{KEYBOARD.get('LINKED_PAPERCLIPS')} Количество связей</b> - "
                 f"<i>{len(binds)}/{client.limit_binds}</i>\n",
@@ -54,6 +71,11 @@ class ClientMain:
             if client.access:
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
                     f"<b>{KEYBOARD.get('STOPWATCH')} Подписка заканчивается</b> - "
                     f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -64,6 +86,13 @@ class ClientMain:
             elif client.subscribe_type == "start":
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Мы дарим 7 дней бесплатного периода, всем, кто подключился!\n"
+                    "Для активации откройте раздел 'Подписка' и затем 'Промо подписка'\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n\n"
                     f"<b>{KEYBOARD.get('LINKED_PAPERCLIPS')} Количество связей</b> - "
                     f"<i>{len(binds)}/{client.limit_binds}</i>\n",
@@ -72,6 +101,11 @@ class ClientMain:
             else:
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n"
                     f"<b>{KEYBOARD.get('STOPWATCH')} Подписка закончилась</b> - "
                     f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -84,6 +118,11 @@ class ClientMain:
             if client.access:
                 await bot.send_message(callback.from_user.id,
                                        "<b>Меню автопостинга</b>\n\n"
+                                       "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                       "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                       "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                       "логику распределения контента)\n\n"
+                                       "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                        f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
                                        f"<b>{KEYBOARD.get('STOPWATCH')} Подписка заканчивается</b> - "
                                        f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -94,6 +133,11 @@ class ClientMain:
             else:
                 await bot.send_message(callback.from_user.id,
                                        "<b>Меню автопостинга</b>\n\n"
+                                       "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                       "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                       "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                       "логику распределения контента)\n\n"
+                                       "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                        f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n"
                                        f"<b>{KEYBOARD.get('STOPWATCH')} Подписка закончилась</b> - "
                                        f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -111,6 +155,11 @@ class ClientMain:
         if client.access:
             await bot.send_message(callback.from_user.id,
                                    "<b>Меню автопостинга</b>\n\n"
+                                   "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                   "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                   "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                   "логику распределения контента)\n\n"
+                                   "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                    f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
                                    f"<b>{KEYBOARD.get('STOPWATCH')} Подписка заканчивается</b> - "
                                    f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -121,6 +170,11 @@ class ClientMain:
         else:
             await bot.send_message(callback.from_user.id,
                                    "<b>Меню автопостинга</b>\n\n"
+                                   "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                                   "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                                   "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                                   "логику распределения контента)\n\n"
+                                   "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                                    f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n"
                                    f"<b>{KEYBOARD.get('STOPWATCH')} Подписка закончилась</b> - "
                                    f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -203,6 +257,11 @@ class ClientBinds:
             if client.access:
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     "<b>У вас нет ни одной связи!</b>\n\n"
                     "<i>Вам нужно добавить связь\n\n</i>"
                     f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
@@ -215,6 +274,13 @@ class ClientBinds:
             elif client.subscribe_type == "start":
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Мы дарим 7 дней бесплатного периода, всем, кто подключился!\n"
+                    "Для активации откройте раздел 'Подписка' и затем 'Промо подписка'\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     "<b>У вас нет ни одной связи!</b>\n\n"
                     f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n\n"
                     f"<b>{KEYBOARD.get('LINKED_PAPERCLIPS')} Количество связей</b> - "
@@ -224,6 +290,11 @@ class ClientBinds:
             else:
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     "<b>У вас нет ни одной связи!</b>\n\n"
                     "<i>Вам нужно добавить связь\n\n</i>"
                     f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n"
@@ -1317,10 +1388,15 @@ class ClientAddBinds:
             binds = await getter.client_select_all_binds(callback.from_user.id)
             if client.access:
                 await callback.message.edit_text(
+                    "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     "<b>У вас достигнут лимит связей!</b>\n"
                     "<b>Чтобы увеличить лимит, пройдите в меню</b> "
                     "<b>Подписка, а затем нажмите кнопку Увеличить кол-во связей</b>"
-                    "<b>Меню автопостинга</b>\n\n"
                     f"<b>{KEYBOARD.get('CHECK_MARK_BUTTON')} Ваша подписка активна!</b>\n"
                     f"<b>{KEYBOARD.get('STOPWATCH')} Подписка заканчивается</b> - "
                     f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -1331,6 +1407,11 @@ class ClientAddBinds:
             else:
                 await callback.message.edit_text(
                     "<b>Меню автопостинга</b>\n\n"
+                    "Связь – это связка вашего Telegram-канала и группы/паблика VK\n"
+                    "- к одной группе/паблику VK может быть привязано несколько Telegram-каналов\n"
+                    "- к нескольким группам/пабликам VK может быть привязан один Telegram-канал (можете настроить любую "
+                    "логику распределения контента)\n\n"
+                    "Техническая поддержка и дополнительные материалы – https://t.me/smposter_support\n\n"
                     f"<b>{KEYBOARD.get('CROSS_MARK')} Ваша подписка неактивна!</b>\n"
                     f"<b>{KEYBOARD.get('STOPWATCH')} Подписка закончилась</b> - "
                     f"<i>{client.subscribe.strftime('%d-%m-%Y, %H:%M:%S')}</i>\n\n"
@@ -1673,7 +1754,7 @@ class ClientSubscribe:
         await bot.send_invoice(callback.from_user.id,
                                title="Основная подписка",
                                description="Основная подписка включает 5 связок",
-                               payload="some_invoice",
+                               payload="client_first_paid",
                                currency="RUB",
                                provider_token=PAY_TOKEN,
                                prices=prices)
@@ -1707,14 +1788,14 @@ class ClientSubscribe:
                                           f"<i>{len(binds)}/{client.limit_binds}</i>\n"
                 subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
                 await bot.send_message(message.from_user.id,
-                    f"<b>Вы приобрели стандартную подписку!\n\n</b>"
-                    "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                    "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
-                    f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
-                    f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n"
-                    f"{access}\n",
-                    disable_web_page_preview=True,
-                    reply_markup=ClientMarkup.client_subscribe())
+                                       f"<b>Вы приобрели стандартную подписку!\n\n</b>"
+                                       "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
+                                       "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                                       f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
+                                       f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n"
+                                       f"{access}\n",
+                                       disable_web_page_preview=True,
+                                       reply_markup=ClientMarkup.client_subscribe())
             if data.get("paid"):
                 await setter.client_paid(message.from_user.id, int(amount))
                 client = await getter.client_select(message.from_user.id)
@@ -1802,7 +1883,7 @@ class ClientSubscribe:
         await bot.send_invoice(callback.from_user.id,
                                title="Платёж",
                                description=f"Вам нужно пополнить баланс на {payment[:-2]} рублей",
-                               payload="some_invoice",
+                               payload="client_paid",
                                currency="RUB",
                                provider_token=PAY_TOKEN,
                                prices=prices)
@@ -1839,16 +1920,16 @@ class ClientSubscribe:
 
     @staticmethod
     async def client_add_limit_binds_2(callback: types.CallbackQuery, state: FSMContext):
-        payment = str(callback.data[19:]) + "00"
+        payment = int(callback.data[19:])
         await state.update_data(amount_binds=callback.data[:1],
                                 payment=payment,
                                 add_binds_pay="add_binds_pay")
-        prices = [LabeledPrice(label="Paid", amount=int(payment))]
+        prices = [LabeledPrice(label="Paid", amount=payment * 100)]
         await bot.delete_message(callback.from_user.id, callback.message.message_id)
         await bot.send_invoice(callback.from_user.id,
                                title="Платёж",
-                               description=f"Вам нужно пополнить баланс на {payment[:-2]} рублей",
-                               payload="some_invoice",
+                               description=f"Вам нужно пополнить баланс на {str(payment)[:-2]} рублей",
+                               payload="add_limit_binds",
                                currency="RUB",
                                provider_token=PAY_TOKEN,
                                prices=prices)
