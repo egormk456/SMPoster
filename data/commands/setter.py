@@ -286,7 +286,7 @@ async def client_paid(user_id, amount):
     payment = Payments(user_id=user_id, date_p=datetime.now(),
                        type_p="standard", amount_p=amount)
     await payment.create()
-    timed = datetime.now() + timedelta(days=30)
+    timed = client.subscribe + timedelta(days=30)
     await client.update(subscribe=timed,
                         access=True).apply()
 

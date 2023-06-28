@@ -7,6 +7,7 @@ import asyncio
 from collections import defaultdict
 from datetime import datetime
 
+import aioschedule
 # import aioschedule
 import requests
 import vk_api
@@ -379,18 +380,37 @@ async def check_subscribe():
             await client.update(access=True).apply()
 
 
-# async def scheduler():
-#     aioschedule.every().second.do(check_subscribe)
-#     while True:
-#         await aioschedule.run_pending()
-#         await asyncio.sleep(15)
+async def notifications():
+    clients = await getter.check_subscribe()
+    for client in clients:
+        res = client.subscribe - datetime.now()
+        if res.days == 3:
+            await bot.send_message(client.user_id,
+                                   f"<i>Ваша подписка закончится через <b>3 дня</b>, "
+                                   "оплатите, чтобы постинг не остановился</i>\n\n"
+                                   "Пройдите в меню 'Подписка' и нажмите кнопку "
+                                   "'Оплатить +1 месяц'")
+        if res.days == 1:
+            await bot.send_message(client.user_id,
+                                   f"<i>Ваша подписка закончится через <b>1 дня</b>, "
+                                   "оплатите, чтобы постинг не остановился</i>\n\n"
+                                   "Пройдите в меню 'Подписка' и нажмите кнопку "
+                                   "'Оплатить +1 месяц'")
+
+
+async def scheduler():
+    aioschedule.every().minute.do(notifications)
+    aioschedule.every().minute.do(check_subscribe)
+    while True:
+        await aioschedule.run_pending()
+        await asyncio.sleep(1)
 
 
 async def on_startup(_):
     from data import db_gino
     print("Database connected")
     await db_gino.on_startup(dp)
-    # asyncio.create_task(scheduler())
+    asyncio.create_task(scheduler())
     """Удалить БД"""
     # await db.gino.drop_all()
 
