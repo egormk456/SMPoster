@@ -392,14 +392,19 @@ async def notifications():
                                    "'Оплатить +1 месяц'")
         if res.days == 1:
             await bot.send_message(client.user_id,
-                                   f"<i>Ваша подписка закончится через <b>1 дня</b>, "
+                                   f"<i>Ваша подписка закончится через <b>1 день</b>, "
                                    "оплатите, чтобы постинг не остановился</i>\n\n"
+                                   "Пройдите в меню 'Подписка' и нажмите кнопку "
+                                   "'Оплатить +1 месяц'")
+        if res.days <= 0:
+            await bot.send_message(client.user_id,
+                                   f"<i>Ваша подписка</i> <b>закончилась!</b>\n\n"
                                    "Пройдите в меню 'Подписка' и нажмите кнопку "
                                    "'Оплатить +1 месяц'")
 
 
 async def scheduler():
-    aioschedule.every().minute.do(notifications)
+    aioschedule.every().day.do(notifications)
     aioschedule.every().minute.do(check_subscribe)
     while True:
         await aioschedule.run_pending()

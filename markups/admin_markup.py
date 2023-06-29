@@ -152,7 +152,11 @@ class AdminMarkup:
             get5 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
                                              f"Вернуться в главное меню",
                                         callback_data="admin_main")
+            get6 = InlineKeyboardButton(text=f"Удалить польз.",
+                                        callback_data="admin_find_user_delete_user")
+
             approve_.insert(get2)
+            approve_.insert(get6)
             approve_.insert(get5)
             return approve_
         else:
@@ -180,9 +184,12 @@ class AdminMarkup:
             get6 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
                                              f"Вернуться в главное меню",
                                         callback_data="admin_main")
+            get7 = InlineKeyboardButton(text=f"Удалить польз.",
+                                        callback_data="admin_find_user_delete_user")
             approve_.insert(get)
             approve_.insert(get2)
             approve_.insert(get5)
+            approve_.insert(get7)
             approve_.insert(get6)
             return approve_
 
