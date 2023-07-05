@@ -22,7 +22,7 @@ from handlers import register_admin_handler, register_client_handler
 from logger import init_logger
 from markups.client_markup import ClientMarkup
 from markups.admin_markup import AdminMarkup
-from posts_porecess.main import (
+from reply_process.main import (
     collect_post,
     process_queue,
     HANDLE_TYPES,

@@ -2,3 +2,4 @@
 .idea
 pycache/
 test.py
+logs
