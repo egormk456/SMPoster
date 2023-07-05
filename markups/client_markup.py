@@ -112,10 +112,13 @@ class ClientMarkup:
         approve_ = InlineKeyboardMarkup(row_width=2)
         get2 = InlineKeyboardButton(text=f'Добавить кол-во связей',
                                     callback_data='client_add_limit_binds')
+        get1 = InlineKeyboardButton(text="Оплатить +1 месяц",
+                                    callback_data='client_subscribe_yookassa')
         get4 = InlineKeyboardButton(text=f'{KEYBOARD.get("RIGHT_ARROW_CURVING_LEFT")} '
                                          f'Вернуться в главное меню',
                                     callback_data='client_main_menu')
         approve_.insert(get2)
+        approve_.insert(get1)
         approve_.row(get4)
         return approve_
 
@@ -133,9 +136,7 @@ class ClientMarkup:
 
     @staticmethod
     def client_add_limit_binds():
-        approve_ = InlineKeyboardMarkup(row_width=3)
-        get = InlineKeyboardButton(text=f'1',
-                                   callback_data='client_add_limit_binds_1')
+        approve_ = InlineKeyboardMarkup(row_width=2)
         get1 = InlineKeyboardButton(text=f'2',
                                     callback_data='client_add_limit_binds_2')
         get2 = InlineKeyboardButton(text=f'3',
@@ -147,7 +148,6 @@ class ClientMarkup:
         get5 = InlineKeyboardButton(text=f'{KEYBOARD.get("RIGHT_ARROW_CURVING_LEFT")} '
                                          f'Назад',
                                     callback_data='client_subscribe')
-        approve_.insert(get)
         approve_.insert(get1)
         approve_.insert(get2)
         approve_.insert(get3)

@@ -18,7 +18,7 @@ POSTGRES_URI = f"postgresql://{POSTGRESQL_USER}:" \
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 ADMIN_ID = str(os.getenv('ADMIN_ID')).split(',')
-PAY_TOKEN = "390540012:LIVE:35227"
+PAY_TOKEN = os.getenv('PAY_TOKEN')
 
 KEYBOARD = {
     "FAST_FORWARD_BUTTON": emojize(':fast-forward_button:'),

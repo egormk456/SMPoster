@@ -4,7 +4,7 @@ from aiogram import Dispatcher
 from aiogram.types import ContentType
 
 from .client import ClientMain, ClientBinds, ClientAddBinds, ClientSubscribe
-from .admin import AdminMain, AdminLimits, AdminUserList, AdminBindList, AdminFindUser, AdminAdvert
+from .admin import AdminMain, AdminLimits, AdminUserList, AdminBindList, AdminFindUser, AdminAdvert, AdminStats
 from states import states
 
 
@@ -330,3 +330,18 @@ def register_admin_handler(disp: Dispatcher):
     disp.register_callback_query_handler(AdminFindUser.admin_see_payments_next,
                                          state=["*"],
                                          text="admin_list_payments_next")
+
+    """Admin Stats"""
+
+    disp.register_callback_query_handler(AdminStats.admin_stats_menu,
+                                         state=["*"],
+                                         text="admin_stats_menu")
+    disp.register_callback_query_handler(AdminStats.admin_stats_clients,
+                                         state=["*"],
+                                         text="admin_stats_clients")
+    disp.register_callback_query_handler(AdminStats.admin_stats_binds,
+                                         state=["*"],
+                                         text="admin_stats_binds")
+    disp.register_callback_query_handler(AdminStats.admin_stats_payments,
+                                         state=["*"],
+                                         text="admin_stats_payments")
