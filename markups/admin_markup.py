@@ -9,22 +9,31 @@ class AdminMarkup:
         approve_ = InlineKeyboardMarkup(row_width=2)
         get = InlineKeyboardButton(text="Список пользователей",
                                    callback_data="admin_user_list")
-        get1 = InlineKeyboardButton(text="Список связей",
+        get1 = InlineKeyboardButton(text="Тарифы пользователей",
+                                    callback_data="admin_user_sub_types")
+        get2 = InlineKeyboardButton(text="Заблокировали бота",
+                                    callback_data="admin_user_block")
+        get3 = InlineKeyboardButton(text="Список связей",
                                     callback_data="admin_bind_list")
-        get2 = InlineKeyboardButton(text="Найти пользователя",
+        get4 = InlineKeyboardButton(text="Найти пользователя",
                                     callback_data="admin_find_user")
-        get3 = InlineKeyboardButton(text="Изменения лимитов",
+        get5 = InlineKeyboardButton(text="Изменения лимитов",
                                     callback_data="admin_limits_changes")
-        get4 = InlineKeyboardButton(text="Сделать объявление",
+        get6 = InlineKeyboardButton(text="Сделать объявление",
                                     callback_data="admin_advert")
-        get5 = InlineKeyboardButton(text="Выгрузить Статистику",
+        get7 = InlineKeyboardButton(text="Выгрузить Статистику",
                                     callback_data="admin_stats_menu")
+        get8 = InlineKeyboardButton(text="Создать пригласительную ссылку",
+                                    callback_data="admin_invite_link")
         approve_.insert(get)
         approve_.insert(get1)
         approve_.insert(get2)
         approve_.insert(get3)
         approve_.insert(get4)
         approve_.insert(get5)
+        approve_.insert(get6)
+        approve_.insert(get7)
+        approve_.insert(get8)
         return approve_
 
     @staticmethod

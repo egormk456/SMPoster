@@ -4,6 +4,7 @@ from datetime import datetime
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InputFile
+from aiogram.utils.deep_linking import get_start_link
 
 from bot import bot
 from markups.admin_markup import AdminMarkup
@@ -13,7 +14,6 @@ from settings.config import KEYBOARD
 
 
 class AdminMain:
-
     @staticmethod
     async def admin_main(callback: types.CallbackQuery, state: FSMContext):
         await state.finish()
@@ -161,7 +161,8 @@ class AdminUserList:
         while True:
             book.append(f"<b>ID</b> - <i>{user_list[i].id}</i>\n"
                         f"<b>ID пользователя</b> - <i>{user_list[i].user_id}</i>\n"
-                        f"<b>Username пользователя</b> - <i>{user_list[i].username}</i>\n"
+                        f"<b>Username пользователя</b> - "
+                        f"{f'@{user_list[i].username}' if user_list[i].username is not None else 'Не указано'}\n"
                         f"<b>Доступ</b> - <i>{user_list[i].access}</i>\n"
                         f"<b>Кол-во связей</b> - <i>{user_list[i].binds}</i>\n"
                         f"<b>Лимит связей</b> - <i>{user_list[i].limit_binds}</i>\n\n")
@@ -185,7 +186,8 @@ class AdminUserList:
         while True:
             book.append(f"<b>ID</b> - <i>{user_list[0].id}</i>\n"
                         f"<b>ID пользователя</b> - <i>{user_list[0].user_id}</i>\n"
-                        f"<b>Username пользователя</b> - <i>{user_list[0].username}</i>\n"
+                        f"<b>Username пользователя</b> - "
+                        f"{f'@{user_list[0].username}' if user_list[0].username is not None else 'Не указано'}\n"
                         f"<b>Доступ</b> - <i>{user_list[0].access}</i>\n"
                         f"<b>Кол-во связей</b> - <i>{user_list[0].binds}</i>\n"
                         f"<b>Лимит связей</b> - <i>{user_list[0].limit_binds}</i>\n\n")
@@ -201,6 +203,37 @@ class AdminUserList:
             async with state.proxy() as data:
                 data["user_list"] = user_list
 
+    @staticmethod
+    async def admin_user_sub_type(callback: types.CallbackQuery):
+        user_list = await getter.get_all_clients()
+
+        if user_list:
+            total = {}
+            for user in user_list:
+                if user.subscribe_type in total:
+                    total[user.subscribe_type] += 1
+                else:
+                    total[user.subscribe_type] = 1
+
+            text = ''
+            for t, c in total.items():
+                text += f'<b>{t}:</b> {c}\n'
+        else:
+            text = 'Пользователи не найдены'
+
+        await callback.message.edit_text(text, reply_markup=AdminMarkup.admin_back_main_menu())
+
+    @staticmethod
+    async def admin_user_block(callback: types.CallbackQuery):
+        user_list = await getter.get_clients_by_block_status(True)
+
+        if user_list:
+            text = f'<b>Всего заблокировали:</b>\n{len(user_list)}'
+        else:
+            text = 'Пользователи не найдены'
+
+        await callback.message.edit_text(text, reply_markup=AdminMarkup.admin_back_main_menu())
+
 
 class AdminBindList:
     @staticmethod
@@ -215,11 +248,11 @@ class AdminBindList:
                         f"<b>VK groups names</b> - <i>{bind_list[0].vk_groups_names}</i>\n"
                         f"<b>VK groups IDs</b> - <i>{bind_list[0].vk_groups_ids}</i>\n"
                         f"<b>Ограничения символов</b> - <i>{bind_list[0].qty}</i>\n"
-                        f"<b>Хэштэги</b> - <i>{bind_list[0].tags}</i>\n"
-                        f"<b>Доп. текст</b> - <i>{bind_list[0].opt_text}</i>\n"
-                        f"<b>Исключающие тэги</b> - <i>{bind_list[0].excl_tags}</i>\n"
-                        f"<b>URL</b> - <i>{bool(bind_list[0].url)}</i>\n"
-                        f"<b>Связь в работе</b> - <i>{bind_list[0].on}</i>\n\n")
+                        f"<b>Хэштэги</b> - {bind_list[0].tags}\n"
+                        f"<b>Доп. текст</b> - {bind_list[0].opt_text}\n"
+                        f"<b>Исключающие тэги</b> - {bind_list[0].excl_tags}\n"
+                        f"<b>URL</b> - {bool(bind_list[0].url)}\n"
+                        f"<b>Связь в работе</b> - {bind_list[0].on}\n\n")
             bind_list.pop(0)
             if len(book) == 5 or bind_list == []:
                 break
@@ -324,7 +357,8 @@ class AdminFindUser:
                                        "<b>Данные пользователя</b>\n\n"
                                        f"{block}"
                                        f"<i>User ID</i> - <b>{client.user_id}</b>\n"
-                                       f"<i>Username</i> - <b>@{client.username}</b>\n\n"
+                                       f"<i>Username</i> - "
+                                       f"{f'@{client.username}' if client.username is not None else 'Не указано'}\n\n"
                                        f"<i>Тип подписки</i> - {subscribe_type}"
                                        f"{payment}"
                                        f"{subscribe}"
@@ -399,7 +433,8 @@ class AdminFindUser:
                                    "<b>Данные пользователя</b>\n\n"
                                    f"{block}"
                                    f"<i>User ID</i> - <b>{client.user_id}</b>\n"
-                                   f"<i>Username</i> - <b>@{client.username}</b>\n\n"
+                                   f"<i>Username</i> - "
+                                   f"{f'@{client.username}' if client.username is not None else 'Не указано'}\n\n"
                                    f"<i>Тип подписки</i> - {subscribe_type}"
                                    f"{payment}"
                                    f"{subscribe}"
@@ -520,7 +555,8 @@ class AdminFindUser:
         await callback.message.edit_text("<b>Данные пользователя</b>\n\n"
                                          f"{block}"
                                          f"<i>User ID</i> - <b>{client.user_id}</b>\n"
-                                         f"<i>Username</i> - <b>@{client.username}</b>\n\n"
+                                         f"<i>Username</i> - "
+                                         f"{f'@{client.username}' if client.username is not None else 'Не указано'}\n\n"
                                          f"<i>Тип подписки</i> - {subscribe_type}"
                                          f"{payment}"
                                          f"{subscribe}"
@@ -703,20 +739,39 @@ class AdminAdvert:
 
     @staticmethod
     async def admin_advert_1(message: types.Message, state: FSMContext):
-        await bot.delete_message(message.from_user.id, message.message_id)
-        await bot.delete_message(message.from_user.id, message.message_id - 1)
+        try:
+            await bot.delete_message(message.from_user.id, message.message_id)
+            await bot.delete_message(message.from_user.id, message.message_id-1)
+        except:
+            pass
+
         clients = await getter.all_clients()
-        count = 0
+
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text='Рассылка началась!\n Объявление:\n',
+            reply_markup=AdminMarkup.admin_back_main_menu()
+        )
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text=message.text,
+            entities=message.entities,
+            parse_mode=None
+        )
+
+        success, block = 0, 0
         for i in clients:
             try:
                 await bot.send_message(i.user_id,
-                                       f"<i>Объявление от Администрации</i>\n\n"
-                                       f"{message.text}")
-                count += 1
+                                       f"{message.text}",
+                                       entities=message.entities,
+                                       parse_mode=None)
+                success += 1
             except:
-                pass
+                block += 1
         await bot.send_message(message.from_user.id,
-                               f"Ваше сообщение отправлено - <b>{count}</b> клиентам",
+                               f"Ваше сообщение отправлено: - <b>{success}</b> клиентам\n"
+                               f"<b>{block}</b> не получили сообщение",
                                reply_markup=AdminMarkup.admin_menu())
         await state.finish()
 
@@ -768,3 +823,49 @@ class AdminStats:
         table_payments = InputFile("table_payments.csv")
         await bot.send_document(chat_id=callback.from_user.id,
                                 document=table_payments)
+
+
+class AdminInviteLinks:
+
+    @staticmethod
+    async def admin_invite_link(callback: types.CallbackQuery):
+        text = 'Введите название пригласительной ссылки (до 250 символов)'
+        await bot.edit_message_text(
+            chat_id=callback.message.chat.id,
+            message_id=callback.message.message_id,
+            text=text,
+            reply_markup=AdminMarkup.admin_back_main_menu())
+
+        await states.AdminInviteLinks.name.set()
+
+    @staticmethod
+    async def admin_invite_link_message(message: types.Message, state: FSMContext):
+        try:
+            await bot.delete_message(message.from_user.id, message.message_id)
+            await bot.delete_message(message.from_user.id, message.message_id-1)
+        except:
+            pass
+
+        if len(message.text) > 250:
+            await bot.send_message(
+                chat_id=message.chat.id,
+                text='Текст превышает лимит в 250 символов',
+                reply_markup=AdminMarkup.admin_back_main_menu()
+            )
+            return
+
+        link_id = await setter.create_invite_link(message.text)
+        link = await get_start_link(f'{link_id}', encode=True)
+        await setter.update_invite_link_url(link_id, link)
+
+        text = (
+            f'Пригласительная ссылка создана!\n'
+            f'Название: {message.text}\n'
+            f'Ссылка {link}'
+        )
+        await bot.send_message(
+            chat_id=message.chat.id,
+            text=text,
+            reply_markup=AdminMarkup.admin_menu(),
+            disable_web_page_preview=True, parse_mode=None)
+        await state.finish()

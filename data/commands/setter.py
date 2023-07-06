@@ -6,6 +6,7 @@ from data.models.binds import Binds
 from data.models.posts_media_group import PostsMediaGroup
 from data.models.limits import Limits
 from data.models.payments import Payments
+from data.models.invite_links import InviteLinks
 
 from datetime import datetime, timedelta
 from data.commands import getter
@@ -305,3 +306,21 @@ async def admin_add_days(user_id, days):
     client = await Clients.query.where(Clients.user_id == user_id).gino.first()
     subscribe = client.subscribe + timedelta(days=days)
     await client.update(subscribe=subscribe).apply()
+
+
+async def create_invite_link(name: str) -> int:
+    new_invite_link = InviteLinks(name=name)
+    await new_invite_link.create()
+    return new_invite_link.id
+
+
+async def update_invite_link_url(pk: int, url: str):
+    invite_link = await InviteLinks.query.where(InviteLinks.id == pk).gino.first()
+    if invite_link:
+        await invite_link.update(url=url).apply()
+
+
+async def update_client_invite_link_id(user_id: int, link_id: int):
+    client = await Clients.query.where(Clients.user_id == user_id).gino.first()
+    if client:
+        await client.update(invite_link_id=link_id).apply()

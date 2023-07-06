@@ -14,6 +14,7 @@ import vk_api
 from aiogram import types, executor, Dispatcher
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher import FSMContext
+from aiogram.utils.deep_linking import decode_payload
 
 from bot import dp, bot
 from data.commands import getter, setter
@@ -41,6 +42,13 @@ async def main_menu(message: types.Message):
     client = await getter.client_select(message.from_user.id)
     binds = await getter.client_select_all_binds(message.from_user.id)
     limits = await getter.get_limits()
+
+    link_id = None
+    args = message.get_args()
+    payload = decode_payload(args)
+    if payload:
+        link_id = int(payload)
+
     if not client:
         await bot.send_message(message.from_user.id,
                                "Привет, рады видеть тебя в боте!\n"
@@ -65,7 +73,7 @@ async def main_menu(message: types.Message):
                                "Это минимум в 10 раз дешевле, чем если это делает сотрудник.\n\n"
                                "Бонус – 7 дней пробного периода, с момента, как вы настроите первую связку.\n\n"
                                "Для помощи с настройкой или для обратной связи пишите сюда – @egormk",
-                               reply_markup=ClientMarkup.client_start())
+                               reply_markup=ClientMarkup.client_start(link_id))
     else:
         if client.block:
             await bot.send_message(message.from_user.id,

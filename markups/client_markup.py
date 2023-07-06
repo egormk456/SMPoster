@@ -1,3 +1,5 @@
+from typing import Optional
+
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from settings.config import KEYBOARD
@@ -5,10 +7,10 @@ from settings.config import KEYBOARD
 
 class ClientMarkup:
     @staticmethod
-    def client_start():
+    def client_start(link_id: Optional[int] = None):
         approve_ = InlineKeyboardMarkup()
         get = InlineKeyboardButton(text='Начать настройку',
-                                   callback_data='client_start')
+                                   callback_data=f'client_start{f":{link_id}"if link_id is not None else ""}')
         approve_.insert(get)
         return approve_
 

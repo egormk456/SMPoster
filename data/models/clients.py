@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, sql, Boolean, TIMESTAMP
+from sqlalchemy import Column, Integer, BigInteger, String, sql, Boolean, TIMESTAMP, ForeignKey
 
 from data.db_gino import BaseModel
 
@@ -18,3 +18,4 @@ class Clients(BaseModel):
     subscribe = Column(TIMESTAMP)
     vk_token = Column(String)
     block = Column(Boolean, server_default="false")
+    invite_link_id = Column(ForeignKey("invite_links.id"))

@@ -36,3 +36,7 @@ class AdminFind(StatesGroup):
 
 class AdminAdvert(StatesGroup):
     advert: State = State()
+
+
+class AdminInviteLinks(StatesGroup):
+    name: State = State()

@@ -19,6 +19,12 @@ class ClientMain:
                                 callback.from_user.username)
         client = await getter.client_select(callback.from_user.id)
         binds = await getter.client_select_all_binds(callback.from_user.id)
+
+        callback_data = callback.data.split(':')
+        if len(callback_data) == 2:
+            link_id = int(callback_data[-1])
+            await setter.update_client_invite_link_id(callback.from_user.id, link_id)
+
         if client.access:
             await callback.message.edit_text(
                 "<b>Меню автопостинга</b>\n\n"

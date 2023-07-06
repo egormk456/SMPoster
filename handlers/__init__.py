@@ -1,10 +1,25 @@
 __all__ = ["register_client_handler", "register_admin_handler"]
 
-from aiogram import Dispatcher
+from aiogram import Dispatcher, types
 from aiogram.types import ContentType
 
-from .client import ClientMain, ClientBinds, ClientAddBinds, ClientSubscribe
-from .admin import AdminMain, AdminLimits, AdminUserList, AdminBindList, AdminFindUser, AdminAdvert, AdminStats
+from .client import (
+    ClientMain,
+    ClientBinds,
+    ClientAddBinds,
+    ClientSubscribe
+
+)
+from .admin import (
+    AdminMain,
+    AdminLimits,
+    AdminUserList,
+    AdminBindList,
+    AdminFindUser,
+    AdminAdvert,
+    AdminStats,
+    AdminInviteLinks
+)
 from states import states
 
 
@@ -13,8 +28,8 @@ def register_client_handler(disp: Dispatcher):
     """Client Main"""
 
     disp.register_callback_query_handler(ClientMain.client_start,
-                                         state=["*"],
-                                         text="client_start")
+                                         lambda c: c.data.startswith("client_start"),
+                                         state=["*"])
     disp.register_callback_query_handler(ClientMain.client_main,
                                          state=["*"],
                                          text="client_main_menu")
@@ -247,6 +262,12 @@ def register_admin_handler(disp: Dispatcher):
     disp.register_callback_query_handler(AdminUserList.admin_user_list_next,
                                          state=["*"],
                                          text="admin_user_list_next")
+    disp.register_callback_query_handler(AdminUserList.admin_user_sub_type,
+                                         state=['*'],
+                                         text='admin_user_sub_types')
+    disp.register_callback_query_handler(AdminUserList.admin_user_block,
+                                         state=['*'],
+                                         text='admin_user_block')
 
     """Admin Bind List"""
 
@@ -263,7 +284,8 @@ def register_admin_handler(disp: Dispatcher):
                                          state=["*"],
                                          text="admin_advert")
     disp.register_message_handler(AdminAdvert.admin_advert_1,
-                                  state=states.AdminAdvert.advert)
+                                  state=states.AdminAdvert.advert,
+                                  content_types=types.ContentTypes.TEXT)
 
     """Admin Find User"""
 
@@ -345,3 +367,12 @@ def register_admin_handler(disp: Dispatcher):
     disp.register_callback_query_handler(AdminStats.admin_stats_payments,
                                          state=["*"],
                                          text="admin_stats_payments")
+
+    """Admin InviteLinks"""
+
+    disp.register_callback_query_handler(AdminInviteLinks.admin_invite_link,
+                                         state=["*"],
+                                         text="admin_invite_link")
+    disp.register_message_handler(AdminInviteLinks.admin_invite_link_message,
+                                  state=states.AdminInviteLinks.name)
+

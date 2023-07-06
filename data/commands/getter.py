@@ -71,7 +71,7 @@ async def get_limits():
     return limits
 
 
-async def get_all_clients():
+async def get_all_clients() -> list[Clients]:
     clients = await Clients.query.order_by(asc(Clients.id)).gino.all()
     return clients
 
@@ -79,6 +79,11 @@ async def get_all_clients():
 async def get_all_binds():
     binds = await Binds.query.order_by(asc(Binds.id)).gino.all()
     return binds
+
+
+async def get_clients_by_block_status(block_status=True):
+    clients = await Clients.query.where(Clients.block == block_status).gino.all()
+    return clients
 
 
 async def admin_select_username(username):
