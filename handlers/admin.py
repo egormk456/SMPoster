@@ -826,6 +826,65 @@ class AdminStats:
 
 
 class AdminInviteLinks:
+    @staticmethod
+    async def admin_invite_links_stat(callback: types.CallbackQuery, state: FSMContext):
+        links_list = await getter.get_invited_clients_sub_types()
+        if links_list:
+
+            book = []
+            while True:
+                link = links_list[0]['link']
+                sub_types = links_list[0]['sub_types']
+
+                text_block = f'{link.name} [{link.url}]\n'
+                text_block += '\n'.join([f'<b>{j}</b>: {sub_types.count(j)}' for j in set(sub_types)])
+                text_block += f'\n<b>Всего пользователей</b>: {len(sub_types)}'
+                book.append(text_block)
+
+                links_list.pop(0)
+                if len(book) == 5 or links_list == []:
+                    break
+
+            if not links_list:
+                await callback.message.edit_text("\n\n".join(book),
+                                                 reply_markup=AdminMarkup.admin_back_main_menu())
+            else:
+                await callback.message.edit_text("\n\n".join(book),
+                                                 reply_markup=AdminMarkup.admin_link_list())
+                async with state.proxy() as data:
+                    data["links_list"] = links_list
+
+        else:
+            await callback.message.edit_text(text='Пользователи не найдены',
+                                             reply_markup=AdminMarkup.admin_back_main_menu())
+
+    @staticmethod
+    async def admin_invite_links_stat_next(callback: types.CallbackQuery, state: FSMContext):
+        async with state.proxy() as data:
+            links_list = data.get("links_list")
+
+        book = []
+        while True:
+            link = links_list[0]['link']
+            sub_types = links_list[0]['sub_types']
+
+            text_block = f'{link.name} [{link.url}]\n'
+            text_block += '\n'.join([f'<b>{j}</b>: {sub_types.count(j)}' for j in set(sub_types)])
+            text_block += f'\n<b>Всего пользователей</b>: {len(sub_types)}'
+            book.append(text_block)
+
+            links_list.pop(0)
+            if len(book) == 5 or links_list == []:
+                break
+
+        if not links_list:
+            await callback.message.edit_text("\n\n".join(book),
+                                             reply_markup=AdminMarkup.admin_link_list_back())
+        else:
+            await callback.message.edit_text("\n\n".join(book),
+                                             reply_markup=AdminMarkup.admin_link_list())
+            async with state.proxy() as data:
+                data["links_list"] = links_list
 
     @staticmethod
     async def admin_invite_link(callback: types.CallbackQuery):

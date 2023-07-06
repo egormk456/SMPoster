@@ -11,7 +11,7 @@ class AdminMarkup:
                                    callback_data="admin_user_list")
         get1 = InlineKeyboardButton(text="Тарифы пользователей",
                                     callback_data="admin_user_sub_types")
-        get2 = InlineKeyboardButton(text="Заблокировали бота",
+        get2 = InlineKeyboardButton(text="Заблокированные пользователи",
                                     callback_data="admin_user_block")
         get3 = InlineKeyboardButton(text="Список связей",
                                     callback_data="admin_bind_list")
@@ -23,8 +23,10 @@ class AdminMarkup:
                                     callback_data="admin_advert")
         get7 = InlineKeyboardButton(text="Выгрузить Статистику",
                                     callback_data="admin_stats_menu")
-        get8 = InlineKeyboardButton(text="Создать пригласительную ссылку",
+        get8 = InlineKeyboardButton(text="Пригласительная ссылка",
                                     callback_data="admin_invite_link")
+        get9 = InlineKeyboardButton(text="Статистика по ссылкам",
+                                    callback_data="admin_invite_links_stat")
         approve_.insert(get)
         approve_.insert(get1)
         approve_.insert(get2)
@@ -34,6 +36,7 @@ class AdminMarkup:
         approve_.insert(get6)
         approve_.insert(get7)
         approve_.insert(get8)
+        approve_.insert(get9)
         return approve_
 
     @staticmethod
@@ -101,6 +104,30 @@ class AdminMarkup:
         approve_ = InlineKeyboardMarkup(row_width=1)
         get = InlineKeyboardButton(text=f"С начала",
                                    callback_data="admin_user_list")
+        get1 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
+                                         f"Вернуться в главное меню",
+                                    callback_data="admin_main")
+        approve_.insert(get)
+        approve_.insert(get1)
+        return approve_
+
+    @staticmethod
+    def admin_link_list():
+        approve_ = InlineKeyboardMarkup(row_width=1)
+        get = InlineKeyboardButton(text=f"Следующая страница",
+                                   callback_data="admin_invite_links_stat_next")
+        get1 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
+                                         f"Вернуться в главное меню",
+                                    callback_data="admin_main")
+        approve_.insert(get)
+        approve_.insert(get1)
+        return approve_
+
+    @staticmethod
+    def admin_link_list_back():
+        approve_ = InlineKeyboardMarkup(row_width=1)
+        get = InlineKeyboardButton(text=f"С начала",
+                                   callback_data="admin_invite_links_stat")
         get1 = InlineKeyboardButton(text=f"{KEYBOARD.get('RIGHT_ARROW_CURVING_LEFT')} "
                                          f"Вернуться в главное меню",
                                     callback_data="admin_main")

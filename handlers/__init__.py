@@ -369,10 +369,16 @@ def register_admin_handler(disp: Dispatcher):
                                          text="admin_stats_payments")
 
     """Admin InviteLinks"""
-
+    disp.register_callback_query_handler(AdminInviteLinks.admin_invite_links_stat,
+                                         state=["*"],
+                                         text="admin_invite_links_stat")
+    disp.register_callback_query_handler(AdminInviteLinks.admin_invite_links_stat_next,
+                                         state=["*"],
+                                         text="admin_invite_links_stat_next")
     disp.register_callback_query_handler(AdminInviteLinks.admin_invite_link,
                                          state=["*"],
                                          text="admin_invite_link")
     disp.register_message_handler(AdminInviteLinks.admin_invite_link_message,
                                   state=states.AdminInviteLinks.name)
+
 

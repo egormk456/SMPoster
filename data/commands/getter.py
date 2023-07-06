@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import asc
 
 from data.models.admins import Admins
@@ -6,6 +8,7 @@ from data.models.binds import Binds
 from data.models.posts_media_group import PostsMediaGroup
 from data.models.limits import Limits
 from data.models.payments import Payments
+from data.models.invite_links import InviteLinks
 
 
 async def all_clients():
@@ -99,3 +102,21 @@ async def check_subscribe():
 async def admin_select_all_payments(user_id):
     payments = await Payments.query.order_by(asc(Payments.id)).where(Payments.user_id == user_id).gino.all()
     return payments
+
+
+async def get_invite_link_by_id(pk: int) -> Optional[InviteLinks]:
+    link = await InviteLinks.query.where(InviteLinks.id == pk).gino.first()
+    return link
+
+
+async def get_invited_clients_sub_types() -> list:
+    clients: list[Clients] = await Clients.query.where(Clients.invite_link_id.isnot(None)).gino.all()
+    total = {}
+    if clients:
+        for client in clients:
+            if client.invite_link_id in total:
+                total[client.invite_link_id]['sub_types'].append(client.subscribe_type)
+            else:
+                link = await get_invite_link_by_id(client.invite_link_id)
+                total[client.invite_link_id] = {'link': link, 'sub_types': [client.subscribe_type]}
+    return list(total.values())
