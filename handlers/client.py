@@ -863,6 +863,8 @@ class ClientBinds:
         binds = await getter.client_select_all_binds(callback.from_user.id)
         v = 1
         for i in binds:
+            if not bind:
+                continue
             if i.id == bind.id:
                 break
             else:
@@ -1107,8 +1109,11 @@ class ClientBinds:
 
     @staticmethod
     async def client_change_opt_text_1(message: types.Message, state: FSMContext):
-        await bot.delete_message(message.from_user.id, message.message_id)
-        await bot.delete_message(message.from_user.id, message.message_id - 1)
+        try:
+            await bot.delete_message(message.from_user.id, message.message_id)
+            await bot.delete_message(message.from_user.id, message.message_id - 1)
+        except:
+            pass
         await state.update_data(opt_text=message.text)
         await bot.send_message(message.from_user.id,
                                f"Вот такой текст будет после каждого поста:\n\n"
@@ -1661,8 +1666,8 @@ class ClientSubscribe:
                                       f"<i>{len(binds)}/{client.limit_binds}</i>\n"
             subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
             await callback.message.edit_text(
-                "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                 f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
                 f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n\n"
                 f"{access}\n",
@@ -1675,8 +1680,8 @@ class ClientSubscribe:
                 f"кроме увеличения максимального кол-во связей</b>\n\n"
                 f"<b>Так же вы можете сразу оформить Платную подписку, "
                 f"тогда у вас будет возможность увеличить макс. кол-во связей</b>\n\n"
-                "<b>Платная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                "<b>Платная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                 "<b>Выберите вариант пополнения баланса</b>",
                 disable_web_page_preview=True,
                 reply_markup=ClientMarkup.client_subscribe_start())
@@ -1689,8 +1694,8 @@ class ClientSubscribe:
                 f"<b>Осталось - {timed} дней</b>\n\n"
                 f"<b>Перейдите на платную подписку, тогда у вас будет "
                 f"возможность увеличить макс. кол-во связей </b>\n\n"
-                "<b>Платная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                "<b>Платная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                 "<b>Выберите вариант пополнения баланса</b>",
                 disable_web_page_preview=True,
                 reply_markup=ClientMarkup.client_subscribe_promo())
@@ -1707,8 +1712,8 @@ class ClientSubscribe:
             f"<b>Осталось - {timed} дней</b>\n\n"
             f"<b>Перейдите на платную подписку, тогда у вас будет "
             f"возможность увеличить макс. кол-во связей </b>\n\n"
-            "<b>Платная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-            "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+            "<b>Платная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+            "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
             "<b>Выберите вариант пополнения баланса</b>",
             disable_web_page_preview=True,
             reply_markup=ClientMarkup.client_subscribe_promo())
@@ -1790,8 +1795,8 @@ class ClientSubscribe:
                 subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
                 await bot.send_message(message.from_user.id,
                     f"<b>Вы приобрели стандартную подписку!\n\n</b>"
-                    "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                    "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                    "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                    "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                     f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
                     f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n"
                     f"{access}\n",
@@ -1817,8 +1822,8 @@ class ClientSubscribe:
                                           f"<i>{len(binds)}/{client.limit_binds}</i>\n"
                 subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
                 await bot.send_message(message.from_user.id,
-                                       "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                                       "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                                       "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                                       "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                                        f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
                                        f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n"
                                        f"{access}\n",
@@ -1849,8 +1854,8 @@ class ClientSubscribe:
                 subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
                 await bot.send_message(message.from_user.id,
                                        f"<b>Вы добавили количество связей</b> - <i>{amount_binds}</i>\n\n"
-                                       "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                                       "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                                       "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                                       "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                                        f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
                                        f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n"
                                        f"{access}\n",
@@ -1959,8 +1964,8 @@ class ClientSubscribe:
             subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
             await callback.message.edit_text(
                 "<b>Невозможно удалить связи меньше стандарта !</b>\n\n"
-                "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-                "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+                "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+                "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
                 f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
                 f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n\n"
                 f"{access}\n",
@@ -1994,8 +1999,8 @@ class ClientSubscribe:
         subscribe_type = "Промо" if client.subscribe_type == "promo" else "Платная"
         await callback.message.edit_text(
             f"<b>Вы удалили количество связей</b> - <i>{limit}</i>\n\n"
-            "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199 рублей.</b>\n"
-            "<b>Каждая дополнительная связь - +50 рублей. </b>\n\n"
+            "<b>Стандартная подписка, включающая в себя до 5 связей и весь функционал - 199р./месяц.</b>\n"
+            "<b>Каждая дополнительная связь - +80р./месяц. </b>\n\n"
             f"<b>Сейчас ваш ежемесячный платёж составляет</b> - <i>{client.payment} рублей</i>\n"
             f"<b>Тип подписки</b> - <i>{subscribe_type}</i>\n\n"
             f"{access}\n",
