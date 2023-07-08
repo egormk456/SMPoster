@@ -833,6 +833,7 @@ class ClientBinds:
     async def client_approve_delete_bind(callback: types.CallbackQuery, state: FSMContext):
         bind_id = callback.data[27:]
         await setter.client_delete_bind(int(bind_id))
+        await setter.client_del_bind_in_client_table(callback.from_user.id)
         await state.finish()
         binds = await getter.client_select_all_binds(callback.from_user.id)
         if binds:

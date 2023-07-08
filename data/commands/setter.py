@@ -57,6 +57,12 @@ async def client_add_new_bind_in_client_table(user_id):
     await client.update(binds=client.binds + 1).apply()
 
 
+async def client_del_bind_in_client_table(user_id: int):
+    client: Clients = await Clients.query.where(Clients.user_id == user_id).gino.first()
+    if client.binds > 0:
+        await client.update(binds=client.binds - 1).apply()
+
+
 async def client_on_bind(user_id, bind_id):
     logger.info(f'{user_id} Клиент включает связь {bind_id}')
     bind = await Binds.query.where(Binds.id == bind_id).gino.first()
