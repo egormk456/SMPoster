@@ -126,12 +126,11 @@ async def send_proc(bot, message_items):
 async def get_photo_attachment(bot, file_id, vk_token):
     file_url = await get_file_url(bot, file_id)
     upload_url = get_upload_url('https://api.vk.com/method/photos.getWallUploadServer', vk_token)
-    temp_file = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+    temp_file = tempfile.NamedTemporaryFile(suffix='.png', delete=True)
     temp_file.write(file_url.getvalue())
     curl_command = f'curl -F "photo=@{temp_file.name}" "{upload_url}"'
     process = subprocess.Popen(curl_command, shell=True, stdout=subprocess.PIPE, )
     output, _ = process.communicate()
-    temp_file.close()
 
     output_data = json.loads(output)
 
@@ -145,6 +144,7 @@ async def get_photo_attachment(bot, file_id, vk_token):
             'hash': output_data['hash']
         }
     )
+    temp_file.close()
     if save_result.status_code == 200:
         save_result = save_result.json()['response']
         return f'photo{save_result[0]["owner_id"]}_{save_result[0]["id"]}'
@@ -154,7 +154,7 @@ async def get_video_attachment(bot, file_id, vk_token):
     file_url = await get_file_url(bot, file_id)
     upload_url = get_upload_url('https://api.vk.com/method/video.save', vk_token)
 
-    temp_file = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False)
+    temp_file = tempfile.NamedTemporaryFile(suffix='.mp4', delete=True)
     temp_file.write(file_url.getvalue())
 
     curl_command = f'curl -F "video=@{temp_file.name}" "{upload_url}"'
@@ -241,19 +241,26 @@ def parse_entities(text: str, entities: list[dict]):
     if not entities:
         return text
 
-    link_entities = []
+    # link_entities = []
     complete_text = ''
 
     l = 0
     for entity in entities:
         if entity.get('type') == 'text_link':
-            link_entities.append({"offset": entity["offset"], "length": entity["length"], "url": entity["url"]})
+            # link_entities.append({"offset": entity["offset"], "length": entity["length"], "url": entity["url"]})
             offset = entity['offset']
             length = entity['length']
             url = entity['url']
             complete_text += text[l: offset]
             complete_text += f'{text[offset:offset+length - 1].strip()} -> {url} '
             l = offset + length - 1
+        if entity.get('type') == "mention":
+            offset = entity['offset']
+            length = entity['length']
+            complete_text += text[l: offset]
+            complete_text += f't.me/{text[offset + 1:offset + length - 1].strip()}'
+            l = offset + length - 1
+
     complete_text += text[l:]
     return complete_text
 

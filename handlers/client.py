@@ -571,7 +571,7 @@ class ClientBinds:
     async def client_delete_tg_channel_1(callback: types.CallbackQuery, state: FSMContext):
         tg_channel_id = callback.data[25:]
         await state.update_data(tg_channel_id=tg_channel_id)
-        await callback.message.edit_text(f"Вы точно хотите удалить данный ТГ канал <b>{tg_channel_id}</b> из связи ?",
+        await callback.message.edit_text(f"Вы точно хотите удалить данный ТГ канал <b>{tg_channel_id}</b> из связи ?\n Бот автоматически покинет канал",
                                          disable_web_page_preview=True,
                                          reply_markup=ClientMarkup.client_delete_tg_channel_approve())
 
@@ -580,6 +580,10 @@ class ClientBinds:
         async with state.proxy() as data:
             tg_channel_id = data.get("tg_channel_id")
             bind = data.get("bind")
+            try:
+                await bot.leave_chat(tg_channel_id)
+            except:
+                pass
             await setter.client_delete_tg_channel(callback.from_user.id,
                                                   bind.id,
                                                   tg_channel_id)
@@ -825,13 +829,25 @@ class ClientBinds:
                                          f"<b>Название ТГ канала (ов)</b> - <i>{' | '.join(bind.tg_channels_names)}</i>\n"
                                          f"<b>URL ТГ канала (ов)</b> - <i>{' | '.join(bind.tg_channels_urls)}</i>\n\n"
                                          f"<b>Название ВК групп</b> - <i>{' | '.join(bind.vk_groups_names)}</i>\n"
-                                         f"<b>URL ВК групп</b> - <i>{' | '.join(bind.vk_groups_urls)}</i>\n\n",
+                                         f"<b>URL ВК групп</b> - <i>{' | '.join(bind.vk_groups_urls)}</i>\n\n"
+                                         f"<b>Бот автоматически покинет канал (ы) <i>{' | '.join(bind.tg_channels_names)}</i>"
+                                         f"<b> Если каналы из списка присут",
                                          disable_web_page_preview=True,
                                          reply_markup=ClientMarkup.client_delete_bind_approve(bind.id))
 
     @staticmethod
     async def client_approve_delete_bind(callback: types.CallbackQuery, state: FSMContext):
         bind_id = callback.data[27:]
+        bind = await getter.client_select_bind(bind_id)
+        if bind.tg_channels_ids:
+            for tg_channel_id in bind.tg_channels_ids:
+                binds = await getter.client_select_binds_with_tg_channel_id(tg_channel_id)
+                if len(binds) > 1:
+                    continue
+                try:
+                    await bot.leave_chat(tg_channel_id)
+                except:
+                    pass
         await setter.client_delete_bind(int(bind_id))
         await setter.client_del_bind_in_client_table(callback.from_user.id)
         await state.finish()

@@ -416,15 +416,18 @@ async def notifications():
 async def scheduler():
     aioschedule.every().day.do(notifications)
     aioschedule.every().minute.do(check_subscribe)
+
     while True:
+        print('tik')
         await aioschedule.run_pending()
         await asyncio.sleep(1)
 
 
 async def on_startup(_):
     from data import db_gino
-    print("Database connected")
     await db_gino.on_startup(dp)
+    print("Database connected")
+
     asyncio.create_task(scheduler())
     """Удалить БД"""
     # await db.gino.drop_all()
@@ -436,6 +439,11 @@ async def on_startup(_):
     """Регистрация хэндлеров"""
     register_admin_handler(dp)
     register_client_handler(dp)
+    print("Handlers registered")
+
+    """Регистрация команд"""
+    await dp.bot.set_my_commands([types.BotCommand('start', 'Запустить бота')])
+    print("Commands registered")
 
     """Очередь постов"""
     dp.queue = defaultdict(list)

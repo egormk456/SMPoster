@@ -59,6 +59,16 @@ async def client_select_bind_with_tg_channel_id(tg_channel_id):
                 return bind
 
 
+async def client_select_binds_with_tg_channel_id(tg_channel_id) -> list[Binds]:
+    binds = await all_binds()
+    total = []
+    for bind in binds:
+        for tg_id in bind.tg_channels_ids:
+            if tg_id == tg_channel_id:
+                total.append(bind)
+    return total
+
+
 async def client_bind(user_id):
     bind = await Binds.query.order_by(asc(Binds.id)).where(Binds.owner_id == user_id).gino.all()
     return bind
