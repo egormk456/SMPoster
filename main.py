@@ -4,6 +4,8 @@ import json
 import shutil
 
 import asyncio
+
+from typing import Callable
 from collections import defaultdict
 from datetime import datetime
 
@@ -394,33 +396,45 @@ async def notifications():
     clients = await getter.check_subscribe()
     for client in clients:
         res = client.subscribe - datetime.now()
-        if res.days == 3:
-            await bot.send_message(client.user_id,
-                                   f"<i>Ваша подписка закончится через <b>3 дня</b>, "
-                                   "оплатите, чтобы постинг не остановился</i>\n\n"
-                                   "Пройдите в меню 'Подписка' и нажмите кнопку "
-                                   "'Оплатить +1 месяц'")
-        if res.days == 1:
-            await bot.send_message(client.user_id,
-                                   f"<i>Ваша подписка закончится через <b>1 день</b>, "
-                                   "оплатите, чтобы постинг не остановился</i>\n\n"
-                                   "Пройдите в меню 'Подписка' и нажмите кнопку "
-                                   "'Оплатить +1 месяц'")
-        if res.days <= 0:
-            await bot.send_message(client.user_id,
-                                   f"<i>Ваша подписка</i> <b>закончилась!</b>\n\n"
-                                   "Пройдите в меню 'Подписка' и нажмите кнопку "
-                                   "'Оплатить +1 месяц'")
+        try:
+            if res.days == 3:
+                await bot.send_message(client.user_id,
+                                       f"<i>Ваша подписка закончится через <b>3 дня</b>, "
+                                       "оплатите, чтобы постинг не остановился</i>\n\n"
+                                       "Пройдите в меню 'Подписка' и нажмите кнопку "
+                                       "'Оплатить +1 месяц'")
+            if res.days == 1:
+                await bot.send_message(client.user_id,
+                                       f"<i>Ваша подписка закончится через <b>1 день</b>, "
+                                       "оплатите, чтобы постинг не остановился</i>\n\n"
+                                       "Пройдите в меню 'Подписка' и нажмите кнопку "
+                                       "'Оплатить +1 месяц'")
+            if res.days <= 0:
+                await bot.send_message(client.user_id,
+                                       f"<i>Ваша подписка</i> <b>закончилась!</b>\n\n"
+                                       "Пройдите в меню 'Подписка' и нажмите кнопку "
+                                       "'Оплатить +1 месяц'")
+        except:
+            pass
 
 
-async def scheduler():
-    aioschedule.every().day.do(notifications)
-    aioschedule.every().minute.do(check_subscribe)
+async def scheduler(func: Callable, sleep_time):
+    while 1:
+        try:
+            await func()
+        except Exception as ex:
+            print(ex)
 
-    while True:
-        print('tik')
-        await aioschedule.run_pending()
-        await asyncio.sleep(1)
+        await asyncio.sleep(sleep_time)
+
+
+# async def scheduler():
+#     aioschedule.every().day.do(notifications)
+#     aioschedule.every().minute.do(check_subscribe)
+#
+#     while True:
+#         await aioschedule.run_pending()
+#         await asyncio.sleep(1)
 
 
 async def on_startup(_):
@@ -428,9 +442,9 @@ async def on_startup(_):
     await db_gino.on_startup(dp)
     print("Database connected")
 
-    asyncio.create_task(scheduler())
-    """Удалить БД"""
-    # await db.gino.drop_all()
+    asyncio.create_task(scheduler(notifications, 60 * 60 * 24))
+    asyncio.create_task(scheduler(check_subscribe, 60))
+    print("Scheduler running")
 
     """Создание БД"""
     await db_gino.db.gino.create_all()

@@ -389,7 +389,11 @@ class AdminFindUser:
 
     @staticmethod
     async def admin_find_username_1(message: types.Message, state: FSMContext):
-        client = await getter.admin_select_username(message.text)
+        if message.text[0] == '@':
+            username = message.text[1:]
+        else:
+            username = message.text
+        client = await getter.admin_select_username(username)
         await state.update_data(client=client)
         if client:
             try:
