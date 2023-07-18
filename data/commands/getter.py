@@ -16,6 +16,11 @@ async def all_clients():
     return clients
 
 
+async def all_active_clients():
+    clients = await Clients.query.where(Clients.subscribe_type != 'blocked').gino.all()
+    return clients
+
+
 async def all_binds():
     binds = await Binds.query.gino.all()
     return binds

@@ -9,7 +9,7 @@ class AdminMarkup:
         approve_ = InlineKeyboardMarkup(row_width=2)
         get = InlineKeyboardButton(text="Список пользователей",
                                    callback_data="admin_user_list")
-        get1 = InlineKeyboardButton(text="Тарифы пользователей",
+        get1 = InlineKeyboardButton(text="Статусы пользователей",
                                     callback_data="admin_user_sub_types")
         get2 = InlineKeyboardButton(text="Заблокированные пользователи",
                                     callback_data="admin_user_block")

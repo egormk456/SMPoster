@@ -752,7 +752,13 @@ class AdminAdvert:
         except:
             pass
 
-        clients = await getter.all_clients()
+        clients = await getter.all_active_clients()
+        if not clients:
+            await bot.send_message(
+                chat_id=message.chat.id,
+                text='Все пользователи в базе, заблокировали бота😤 никто не увидит сообщение',
+                reply_markup=AdminMarkup.admin_back_main_menu()
+            )
 
         await bot.send_message(
             chat_id=message.chat.id,
@@ -795,10 +801,10 @@ class AdminStats:
         with open("table_clients.csv", "w", newline='', encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(["id", "user_id", "username", "access", "binds",
-                             "limit_binds", "subscribe_type", "vk_token", "block"])
+                             "limit_binds", "subscribe_type", "block"])
             for i in all_clients:
                 writer.writerow([i.id, i.user_id, i.username, i.access, i.binds,
-                                 i.limit_binds, i.subscribe_type, i.vk_token, i.block])
+                                 i.limit_binds, i.subscribe_type, i.block])
         table_clients = InputFile("table_clients.csv")
         await bot.send_document(chat_id=callback.from_user.id,
                                 document=table_clients)
