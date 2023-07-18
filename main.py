@@ -5,7 +5,7 @@ import shutil
 
 import asyncio
 
-from typing import Callable
+from typing import Callable, Optional
 from collections import defaultdict
 from datetime import datetime
 
@@ -385,17 +385,24 @@ async def message_collector(message: types.Message):
 async def check_subscribe():
     clients = await getter.check_subscribe()
     for client in clients:
-        timed = client.subscribe - datetime.now()
-        if str(timed)[:1] == "-" and client.access is True:
-            await client.update(access=False).apply()
-        if str(timed)[:1] != "-" and client.access is False:
-            await client.update(access=True).apply()
+        if client.subscribe <= datetime.now():
+            subscribe_type = client.subscribe_type
+            if subscribe_type == 'promo':
+                subscribe_type = 'dropout'
+            elif subscribe_type == 'paid':
+                subscribe_type = 'after payment'
+            await client.update(access=False, subscribe_type=subscribe_type).apply()
 
 
 async def notifications():
     clients = await getter.check_subscribe()
     for client in clients:
         res = client.subscribe - datetime.now()
+        try:
+            message = await bot.send_message(client.user_id, '.', disable_notification=True)
+            await bot.delete_message(client.user_id, message.message_id)
+        except:
+            await client.update(subscribe_type='blocked').apply()
         try:
             if res.days == 3:
                 await bot.send_message(client.user_id,
@@ -409,16 +416,23 @@ async def notifications():
                                        "оплатите, чтобы постинг не остановился</i>\n\n"
                                        "Пройдите в меню 'Подписка' и нажмите кнопку "
                                        "'Оплатить +1 месяц'")
-            if res.days <= 0:
+            if res.days == -1:
                 await bot.send_message(client.user_id,
                                        f"<i>Ваша подписка</i> <b>закончилась!</b>\n\n"
                                        "Пройдите в меню 'Подписка' и нажмите кнопку "
                                        "'Оплатить +1 месяц'")
+            if res.days % 3 == 0:
+                await bot.send_message(client.user_id,
+                                 f"Видел, что ваша подписка закончилась и вы решили ее не продлевать😞\n\n"
+                                 f"Поделитесь своим опытом, использования нашего сервиса: @egormk\n"
+                                 f"А с нас бонус😉")
         except:
             pass
 
 
-async def scheduler(func: Callable, sleep_time):
+async def scheduler(func: Callable, sleep_time, wait_for_start: Optional[int] = None):
+    if wait_for_start:
+        await asyncio.sleep(wait_for_start)
     while 1:
         try:
             await func()
@@ -442,8 +456,8 @@ async def on_startup(_):
     await db_gino.on_startup(dp)
     print("Database connected")
 
-    asyncio.create_task(scheduler(notifications, 60 * 60 * 24))
-    asyncio.create_task(scheduler(check_subscribe, 60))
+    asyncio.create_task(scheduler(notifications, 60 * 60 * 24, wait_for_start=60 * 60))
+    asyncio.create_task(scheduler(check_subscribe, 60 * 60))
     print("Scheduler running")
 
     """Создание БД"""

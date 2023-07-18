@@ -218,6 +218,9 @@ class AdminUserList:
             text = ''
             for t, c in total.items():
                 text += f'<b>{t}:</b> {c}\n'
+
+            text += f'\n<b>Не заблокировали бота:</b> {len([i for i in user_list if i.subscribe_type != "blocked"])}\n'
+            text += f'<b>Всего:</b> {len(user_list)}'
         else:
             text = 'Пользователи не найдены'
 

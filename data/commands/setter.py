@@ -290,11 +290,14 @@ async def client_first_paid(user_id, payment: int):
 
 async def client_paid(user_id, amount):
     client = await Clients.query.where(Clients.user_id == user_id).gino.first()
+    limits = await Limits.query.where(Limits.id == 1).gino.first()
     payment = Payments(user_id=user_id, date_p=datetime.now(),
                        type_p="standard", amount_p=amount)
     await payment.create()
     timed = client.subscribe + timedelta(days=30)
     await client.update(subscribe=timed,
+                        limit_binds=limits.bind_limit,
+                        subscribe_type='paid',
                         access=True).apply()
 
 
